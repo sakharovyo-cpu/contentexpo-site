@@ -70,10 +70,15 @@ img{ max-width:100%; display:block; }
   padding:14px 0;
   gap:18px;
 }
+.topbar__left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
 
 .topbar__right{ display:flex; align-items:center; gap:10px; }
-body.rtl .topbar__right{ flex-direction: row-reverse; }
-.brand{
+body.rtl .brand{
   display:flex;
   align-items:center;
   gap:10px;
@@ -97,6 +102,7 @@ body.rtl .topbar__right{ flex-direction: row-reverse; }
   gap:18px;
   font-size:14px;
   color:var(--muted);
+  margin-left:auto;
 }
 
 .lang-switch{ display:flex; align-items:center; }
