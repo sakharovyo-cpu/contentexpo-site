@@ -70,6 +70,9 @@ img{ max-width:100%; display:block; }
   padding:14px 0;
   gap:18px;
 }
+
+.topbar__right{ display:flex; align-items:center; gap:10px; }
+body.rtl .topbar__right{ flex-direction: row-reverse; }
 .brand{
   display:flex;
   align-items:center;
@@ -630,6 +633,8 @@ input:focus, textarea:focus{
   .contact{ grid-template-columns: 1fr; }
 }
 @media (max-width: 720px){
+  .lang-switch select{ padding: 9px 10px; font-size: 13px; }
+
   .nav{
     position:fixed;
     top:72px; left:12px; right:12px;
