@@ -37,24 +37,64 @@
     });
   }
 
+  const supportedLangs = ['ru','en','zh','ar','tr','ko'];
+  const langToFile = (val) => (val === 'ru') ? 'index.html' : ('index-' + val + '.html');
+
+  // Default language is Russian. We also remember the user's last choice.
+  const getSavedLang = () => {
+    try {
+      const v = (localStorage.getItem('lang') || '').toLowerCase();
+      return supportedLangs.includes(v) ? v : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const setSavedLang = (val) => {
+    try { localStorage.setItem('lang', val); } catch {}
+  };
+
+  const navigateToLang = (val) => {
+    const hash = window.location.hash || '';
+    const file = langToFile(val);
+
+    // Keep the same folder (works for both http(s):// and file://)
+    const parts = window.location.pathname.split('/');
+    if (parts[parts.length - 1] === '') {
+      parts[parts.length - 1] = file;
+    } else {
+      parts[parts.length - 1] = file;
+    }
+    const newPath = parts.join('/');
+
+    window.location.href = newPath + hash;
+  };
+
+  const savedLang = getSavedLang();
+  const defaultLang = 'ru';
+  const targetLang = savedLang || defaultLang;
+
+  // If the user has chosen a language before, open that language.
+  // Otherwise, stay on Russian by default.
+  // Force Russian on first visit (until the user explicitly switches).
+  if (!savedLang && pageLang !== defaultLang) {
+    navigateToLang(defaultLang);
+    return;
+  }
+
+  if (savedLang && savedLang !== pageLang) {
+    navigateToLang(savedLang);
+    return;
+  }
+
   // Language switch (separate HTML files)
   if (langSelect) {
-    // Ensure the select reflects the current language (in case of manual edits)
-    [...langSelect.options].forEach(opt => {
-      opt.selected = opt.value === pageLang;
-    });
+    langSelect.value = pageLang || targetLang;
 
     langSelect.addEventListener('change', () => {
-      const val = langSelect.value;
-      const hash = window.location.hash || '';
-      const file = (val === 'ru') ? 'index.html' : `index-${val}.html`;
-
-      // Keep the same folder (works for both http(s):// and file://)
-      const parts = window.location.pathname.split('/');
-      parts[parts.length - 1] = file;
-      const newPath = parts.join('/');
-
-      window.location.href = `${newPath}${hash}`;
+      const val = (langSelect.value || defaultLang).toLowerCase();
+      setSavedLang(val);
+      if (val !== pageLang) navigateToLang(val);
     });
   }
 
